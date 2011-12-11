@@ -2,5 +2,6 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
 		<Project filename="Spiral/Spiral.cbp" active="1" />
+		<Project filename="libpara/para.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
