@@ -1,0 +1,3 @@
+[submodule "Spiral/arguments"]
+	path = Spiral/arguments
+	url = git@github.com:moses-palmer/arguments

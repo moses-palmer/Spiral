@@ -1,0 +1,23 @@
+ARGUMENT(struct { int width; int height; }, window_size, "-w",
+    "<WIDTH> <HEIGHT>\n"
+    "Sets the size of the window.\n"
+    "\n"
+    "If this is not specified, the application will run in full screen mode.\n",
+    2,
+    ARGUMENT_IS_OPTIONAL,
+
+    target->width = 0;
+    target->height = 0;
+    ,
+
+    target->width = atoi(value_strings[0]);
+    target->height = atoi(value_strings[1]);
+    is_valid = target->width > 1 && target->height > 1;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for window-size (%s %s): dimensions "
+            "must be integers larger than 1\n",
+            value_strings[0], value_strings[1]);
+    }
+    ,
+)

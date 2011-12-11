@@ -4,24 +4,14 @@
 #include <GL/gl.h>
 #include <SDL.h>
 
+#define ARGUMENTS_NO_SETUP
+#define ARGUMENTS_NO_TEARDOWN
+#include "arguments/arguments.h"
+
 /**
  * The user event code that signals that the display should be refreshed.
  */
 #define USER_EVENT_DISPLAY (SDL_USEREVENT + 1)
-
-/**
- * The width of the window.
- *
- * If this is 0, full screen mode is used.
- */
-#define WINDOW_SIZE_WIDTH 800
-
-/**
- * The height of the window.
- *
- * If this is 0, full screen mode is used.
- */
-#define WINDOW_SIZE_HEIGHT 600
 
 /**
  * The number of milliseconds between each redraw.
@@ -138,8 +128,9 @@ opengl_initialize(int width, int height)
     glViewport(0, 0, width, height);
 }
 
-int
-main(int argc, char *argv[])
+static int
+main(int argc, char *argv[],
+    window_size_t window_size)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -162,11 +153,11 @@ main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_Surface* screen;
     unsigned int viewport_width, viewport_height;
-    if (WINDOW_SIZE_WIDTH > 0 && WINDOW_SIZE_HEIGHT > 0) {
-        screen = SDL_SetVideoMode(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT,
+    if (window_size.width > 0 && window_size.height > 0) {
+        screen = SDL_SetVideoMode(window_size.width, window_size.height,
             32, SDL_OPENGL);
-        viewport_width = WINDOW_SIZE_WIDTH;
-        viewport_height = WINDOW_SIZE_HEIGHT;
+        viewport_width = window_size.width;
+        viewport_height = window_size.height;
     }
     else {
         screen = SDL_SetVideoMode(vinfo->current_w, vinfo->current_h,
