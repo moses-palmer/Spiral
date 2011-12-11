@@ -47,6 +47,10 @@
 #define SPIRAL_TWIST 5.0
 
 static struct {
+    /** The scale factor to apply to make horisontal and vertical distances
+        equal */
+    GLfloat xscale, yscale;
+
     struct {
         /** The size of the texture expressed as the width in pixels; the
             texture is square */
@@ -227,6 +231,8 @@ do_display(void)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    glOrtho(-context.xscale, context.xscale, -context.yscale, context.yscale,
+        0.0, 1.0);
 
     context_spiral_render(t);
 
@@ -350,6 +356,16 @@ main(int argc, char *argv[],
     if (!timer) {
         printf("Unable to add timer.\n");
         return 1;
+    }
+
+    /* Make sure horisontal and vertical distances are equal */
+    if (viewport_width > viewport_height) {
+        context.xscale = (double)viewport_width / viewport_height;
+        context.yscale = 1.0;
+    }
+    else {
+        context.xscale = 1.0;
+        context.yscale = (double)viewport_height / viewport_width;
     }
 
     if (!context_spiral_init(viewport_width, viewport_height)) {
