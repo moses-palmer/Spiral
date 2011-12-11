@@ -54,6 +54,9 @@ static struct {
 
         /** The identifier for the spiral texture */
         GLuint texture;
+
+        /** The scale factor used to zoom into the actual spiral */
+        GLfloat scale;
     } spiral;
 } context;
 
@@ -99,6 +102,12 @@ context_spiral_init(unsigned int viewport_width, unsigned int viewport_height)
         return 0;
     }
 
+    /* Calculate the scale factors */
+    context.spiral.scale = (GLfloat)context.spiral.size / spiral_size
+        * (2.0 * radius
+            / (viewport_width < viewport_height
+                ? viewport_width : viewport_height));
+
     /* Bind the data to a texture */
     glEnable(GL_TEXTURE_2D);
     glGenTextures(1, &context.spiral.texture);
@@ -143,6 +152,9 @@ context_spiral_render(double t)
 
     /* Set the rotation relative to the current time */
     glRotated(-360 * SPIRAL_ROTATION_SPEED * t, 0.0, 0.0, 1.0);
+
+    /* Make sure that the transparent padding is not visible */
+    glScalef(context.spiral.scale, context.spiral.scale, 1.0);
 
     /* Draw a rectangle with the spiral as texture */
     glColor3f(1.0, 1.0, 1.0);
