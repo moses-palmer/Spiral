@@ -44,7 +44,7 @@
 /**
  * The amount of twist to apply to the curves.
  */
-#define SPIRAL_TWIST 5.0
+#define SPIRAL_TWIST ARGUMENT_VALUE(spiral_twist)
 
 static struct {
     /** The scale factor to apply to make horisontal and vertical distances
@@ -303,7 +303,8 @@ main(int argc, char *argv[],
     unsigned int spiral_alterations,
     unsigned int spiral_curves,
     double spiral_line_width,
-    double spiral_rotation_speed)
+    double spiral_rotation_speed,
+    double spiral_twist)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

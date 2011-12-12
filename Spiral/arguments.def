@@ -118,3 +118,27 @@ ARGUMENT(double, spiral_rotation_speed, "-r",
     }
     ,
 )
+
+ARGUMENT(double, spiral_twist, "-t",
+    "<TWIST>\n"
+    "Sets the twist of the spiral.\n"
+    "\n"
+    "This must be a value between -30.0 and 30.0.\n"
+    "\n"
+    "Default: 5.0",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 5.0;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= -30.0 && *target <= 30.0;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for TWIST (%s): the value must be "
+            "a number between -30.0 and 30.0\n",
+            value_strings[0]);
+    }
+    ,
+)
