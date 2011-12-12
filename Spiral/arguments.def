@@ -94,3 +94,27 @@ ARGUMENT(double, spiral_line_width, "-l",
     }
     ,
 )
+
+ARGUMENT(double, spiral_rotation_speed, "-r",
+    "<SPEED>\n"
+    "Sets the rotation speed of the spiral, expressed in cycles per second.\n"
+    "\n"
+    "This must be a value between 0.05 and 0.75.\n"
+    "\n"
+    "Default: 0.35",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 0.35;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= 0.05 && *target <= 0.75;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for SPEED (%s): the value must be "
+            "a number between 0.05 and 0.75\n",
+            value_strings[0]);
+    }
+    ,
+)

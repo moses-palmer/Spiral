@@ -39,7 +39,7 @@
 /**
  * The rotation speed of the spiral in cycles per second.
  */
-#define SPIRAL_ROTATION_SPEED 0.35
+#define SPIRAL_ROTATION_SPEED ARGUMENT_VALUE(spiral_rotation_speed)
 
 /**
  * The amount of twist to apply to the curves.
@@ -302,7 +302,8 @@ main(int argc, char *argv[],
     window_size_t window_size,
     unsigned int spiral_alterations,
     unsigned int spiral_curves,
-    double spiral_line_width)
+    double spiral_line_width,
+    double spiral_rotation_speed)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
