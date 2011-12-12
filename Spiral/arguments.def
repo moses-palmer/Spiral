@@ -67,3 +67,30 @@ ARGUMENT(unsigned int, spiral_curves, "-c",
     }
     ,
 )
+
+ARGUMENT(double, spiral_line_width, "-l",
+    "<LINE_WIDTH>\n"
+    "Sets the width of the spiral line.\n"
+    "\n"
+    "Setting this to 0.5 will make the spiral half filled and half "
+    "transparent, and a smaller value will make the transparent part bigger.\n"
+    "\n"
+    "This must be a value between 0.1 and 0.99.\n"
+    "\n"
+    "Default: 0.2",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 0.2;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= 0.1 && *target <= 0.99;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for LINE_WIDTH (%s): the value must be "
+            "a number between 0.1 and 0.99\n",
+            value_strings[0]);
+    }
+    ,
+)

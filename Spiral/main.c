@@ -34,7 +34,7 @@
 /**
  * The line width for the spiral.
  */
-#define SPIRAL_LINE_WIDTH 0.2
+#define SPIRAL_LINE_WIDTH ARGUMENT_VALUE(spiral_line_width)
 
 /**
  * The rotation speed of the spiral in cycles per second.
@@ -301,7 +301,8 @@ static int
 main(int argc, char *argv[],
     window_size_t window_size,
     unsigned int spiral_alterations,
-    unsigned int spiral_curves)
+    unsigned int spiral_curves,
+    double spiral_line_width)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
