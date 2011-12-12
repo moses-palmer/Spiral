@@ -21,3 +21,26 @@ ARGUMENT(struct { int width; int height; }, window_size, "-w",
     }
     ,
 )
+
+ARGUMENT(unsigned int, spiral_alterations, "-a",
+    "<ALTERATIONS>\n"
+    "Sets the number of changes of direction for the spiral.\n"
+    "\n"
+    "This must be a value between 1 and 30.\n"
+    "\n"
+    "Default: 10",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 10;
+    ,
+
+    *target = atoi(value_strings[0]);
+    is_valid = *target >= 1 && *target <= 30;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for ALTERATIONS (%s): the value must be "
+            "a number between 1 and 30\n",
+            value_strings[0]);
+    }
+    ,
+)
