@@ -231,3 +231,27 @@ ARGUMENT(double, spiral_twist, "-t",
     }
     ,
 )
+
+ARGUMENT(struct { GLfloat d[3]; }, spiral_color, "-s",
+    "<SPIRAL_COLOUR>\n"
+    "Sets the colour of the spiral, specified as an HTML colour value.\n"
+    "\n"
+    "Both hexadecimal values (#FFFFFF) and named values (white) are "
+    "recognised.\n"
+    "\n"
+    "Default: white",
+    1,
+    ARGUMENT_IS_OPTIONAL,
+
+    target->d[0] = 1.0;
+    target->d[1] = 1.0;
+    target->d[2] = 1.0;
+    ,
+
+    is_valid = color_parse(value_strings[0], target->d);
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for SPIRAL_COLOUR (%s)\n",
+            value_strings[0]);
+    }
+    ,
+)

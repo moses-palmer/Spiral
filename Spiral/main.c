@@ -161,7 +161,10 @@ context_spiral_render(double t)
     glScalef(context.spiral.scale, context.spiral.scale, 1.0);
 
     /* Draw a rectangle with the spiral as texture */
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(
+        ARGUMENT_VALUE(spiral_color).d[0],
+        ARGUMENT_VALUE(spiral_color).d[1],
+        ARGUMENT_VALUE(spiral_color).d[2]);
     glBegin(GL_QUADS);
 
     glTexCoord2f(0.0, 0.0);
@@ -309,7 +312,8 @@ main(int argc, char *argv[],
     unsigned int spiral_curves,
     double spiral_line_width,
     double spiral_rotation_speed,
-    double spiral_twist)
+    double spiral_twist,
+    spiral_color_t spiral_color)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
