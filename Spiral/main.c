@@ -226,7 +226,11 @@ do_display(void)
     double t = (double)(current_ticks - start_ticks) / 1000.0;
 
     /* Make sure the background is cleared */
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(
+        ARGUMENT_VALUE(background_color).d[0],
+        ARGUMENT_VALUE(background_color).d[1],
+        ARGUMENT_VALUE(background_color).d[2],
+        0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
@@ -300,6 +304,7 @@ opengl_initialize(int width, int height)
 static int
 main(int argc, char *argv[],
     window_size_t window_size,
+    background_color_t background_color,
     unsigned int spiral_alterations,
     unsigned int spiral_curves,
     double spiral_line_width,
