@@ -29,7 +29,7 @@
 /**
  * The number of curves for the spiral.
  */
-#define SPIRAL_CURVES 10
+#define SPIRAL_CURVES ARGUMENT_VALUE(spiral_curves)
 
 /**
  * The line width for the spiral.
@@ -300,7 +300,8 @@ opengl_initialize(int width, int height)
 static int
 main(int argc, char *argv[],
     window_size_t window_size,
-    unsigned int spiral_alterations)
+    unsigned int spiral_alterations,
+    unsigned int spiral_curves)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

@@ -44,3 +44,26 @@ ARGUMENT(unsigned int, spiral_alterations, "-a",
     }
     ,
 )
+
+ARGUMENT(unsigned int, spiral_curves, "-c",
+    "<CURVES>\n"
+    "Sets the number of curves for the spiral.\n"
+    "\n"
+    "This must be a value between 1 and 30.\n"
+    "\n"
+    "Default: 10",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 10;
+    ,
+
+    *target = atoi(value_strings[0]);
+    is_valid = *target >= 1 && *target <= 30;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for CURVES (%s): the value must be a "
+            "number between 1 and 30\n",
+            value_strings[0]);
+    }
+    ,
+)
