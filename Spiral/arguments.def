@@ -1,3 +1,6 @@
+ARGUMENT_SECTION(
+    "General arguments.")
+
 ARGUMENT(struct { int width; int height; }, window_size, "-w",
     "<WIDTH> <HEIGHT>\n"
     "Sets the size of the window.\n"
@@ -21,6 +24,9 @@ ARGUMENT(struct { int width; int height; }, window_size, "-w",
     }
     ,
 )
+
+ARGUMENT_SECTION(
+    "Spiral arguments.")
 
 ARGUMENT(unsigned int, spiral_alterations, "-a",
     "<ALTERATIONS>\n"
