@@ -309,3 +309,30 @@ ARGUMENT(double, background_animation_speed, ARGUMENT_NO_SHORT_OPTION,
     }
     ,
 )
+
+ARGUMENT(double, background_animation_turbulence, ARGUMENT_NO_SHORT_OPTION,
+    "<TURBULENCE>\n"
+    "Sets the turbulence of the background animation.\n"
+    "\n"
+    "The turbulence denotes how much the animation moves. Values above 0.3 may "
+    "cause rough edges in the background."
+    "\n"
+    "This must be a value between 0.05 and 2.0.\n"
+    "\n"
+    "Default: 0.25",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 0.25;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= 0.05 && *target <= 2.0;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for TURBULENCE (%s): the value must be "
+            "a number between 0.05 and 2.0\n",
+            value_strings[0]);
+    }
+    ,
+)

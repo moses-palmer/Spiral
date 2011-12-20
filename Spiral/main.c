@@ -64,7 +64,7 @@
 /**
  * The turbulence of the background animation.
  */
-#define ANIMATION_TURBULENCE 0.3
+#define ANIMATION_TURBULENCE ARGUMENT_VALUE(background_animation_turbulence)
 
 /**
  * The opacity of the background animation.
@@ -564,7 +564,8 @@ main(int argc, char *argv[],
     spiral_color_t spiral_color,
     background_color_t background_color,
     background_animation_size_t background_animation_size,
-    double background_animation_speed)
+    double background_animation_speed,
+    double background_animation_turbulence)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
