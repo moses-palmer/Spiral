@@ -57,6 +57,21 @@
 #define ANIMATION_HEIGHT 30
 
 /**
+ * The speed of the background animation.
+ */
+#define ANIMATION_SPEED 1.3
+
+/**
+ * The turbulence of the background animation.
+ */
+#define ANIMATION_TURBULENCE 0.3
+
+/**
+ * The opacity of the background animation.
+ */
+#define ANIMATION_OPACITY 0.4
+
+/**
  * One node of the animated background.
  */
 typedef struct {
@@ -93,6 +108,61 @@ static struct {
         AnimationNode *nodes;
     } animation;
 } context;
+
+/**
+ * Returns the opacity of a colour value based on the current time.
+ *
+ * @param t
+ *     The current time, expressed as seconds since the first frame.
+ * @return the opacity of the colour expressed as a value between 0.0 and 1.0
+ */
+static inline double
+color_function(double t)
+{
+    return (sin(ANIMATION_SPEED * t * 2.0 * M_PI) + 1.0) / 2.0;
+}
+
+/**
+ * Returns the amount of skew to apply to a coordinate of the background
+ * animation based on the current time.
+ *
+ * @param t
+ *     The current time, expressed as seconds since the first frame. The random
+ *     offset of the node should be added to this value.
+ * @return the skew
+ */
+static inline double
+skew_function(double t)
+{
+    return ANIMATION_TURBULENCE * sin(ANIMATION_SPEED * t);
+}
+
+/**
+ * Returns a node of the animated background.
+ *
+ * @param x, y
+ *     The coordinates of the node to get. The coordinates are clipped to the
+ *     dimensions of the animated background before being used.
+ * @return the node at (x, y)
+ */
+static inline AnimationNode*
+context_animation_get_node(int x, int y)
+{
+    if (x < 0) {
+        x = 0;
+    }
+    else if (x >= context.animation.width - 1) {
+        x = context.animation.width - 1;
+    }
+    if (y < 0) {
+        y = 0;
+    }
+    else if (y >= context.animation.height - 1) {
+        y = context.animation.height - 1;
+    }
+
+    return &context.animation.nodes[y * context.animation.width + x];
+}
 
 /**
  * Initialises the animation struct of context.
@@ -140,6 +210,106 @@ static void
 context_animation_free(void)
 {
     free(context.animation.nodes);
+}
+
+/**
+ * Draws the animated background.
+ *
+ * @param t
+ *     The current time, expressed as seconds since the first frame.
+ */
+static void
+context_animation_render(double t)
+{
+    /* Do nothing if the animation will not be visible */
+    if (ANIMATION_OPACITY <= 0.0) {
+        return;
+    }
+
+    glPushMatrix();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    /* Make sure that the loops below iterate over the entire screen; we keep a
+       margin so that all drawn squares are animated */
+    glScalef(
+        context.xscale * 2.0 / (context.animation.width - 1.5),
+        context.yscale * 2.0 / (context.animation.height - 1.5),
+        1.0);
+
+    int x, y;
+    for (y = 0; y < context.animation.height; y++) {
+        for (x = 0; x < context.animation.width; x++) {
+            AnimationNode *a;
+
+            glPushMatrix();
+
+            /* Move to the correct square */
+            glTranslatef(
+                x - 0.5 * context.animation.width,
+                y - 0.5 * context.animation.height,
+                0.0);
+
+            glBegin(GL_QUADS);
+
+            /* Top left */
+            a = context_animation_get_node(x, y);
+            glColor4f(a->red, a->green, a->blue,
+                ANIMATION_OPACITY * color_function(t + a->d));
+            glVertex2f(
+                (x
+                    ? skew_function(t + a->d + M_PI / 2.0)
+                    : 0.0),
+                (y
+                    ? skew_function(t + a->d)
+                    : 0.0));
+
+            /* Bottom left */
+            a = context_animation_get_node(x, y + 1);
+            glColor4f(a->red, a->green, a->blue,
+                ANIMATION_OPACITY * color_function(t + a->d));
+            glVertex2f(
+                (x
+                    ? skew_function(t + a->d + M_PI / 2.0)
+                    : 0.0),
+                1.0 + (y < context.animation.height - 1
+                    ? skew_function(t + a->d)
+                    : 0.0));
+
+            /* Bottom right */
+            a = context_animation_get_node(x + 1, y + 1);
+            glColor4f(a->red, a->green, a->blue,
+                ANIMATION_OPACITY * color_function(t + a->d));
+            glVertex2f(
+                1.0 + (x < context.animation.width - 1
+                    ? skew_function(t + a->d + M_PI / 2.0)
+                    : 0.0),
+                1.0 + (y < context.animation.height - 1
+                    ? skew_function(t + a->d)
+                    : 0.0));
+
+            /* Top right */
+            a = context_animation_get_node(x + 1, y);
+            glColor4f(a->red, a->green, a->blue,
+                ANIMATION_OPACITY * color_function(t + a->d));
+            glVertex2f(
+                1.0 + (x < context.animation.width - 1
+                    ? skew_function(t + a->d + M_PI / 2.0)
+                    : 0.0),
+                (y
+                    ? skew_function(t + a->d)
+                    : 0.0));
+
+            glEnd();
+
+            glPopMatrix();
+        }
+    }
+
+    glDisable(GL_BLEND);
+
+    glPopMatrix();
 }
 
 /**
@@ -319,6 +489,7 @@ do_display(void)
     glOrtho(-context.xscale, context.xscale, -context.yscale, context.yscale,
         0.0, 1.0);
 
+    context_animation_render(t);
     context_spiral_render(t);
 
     /* Render to screen */
