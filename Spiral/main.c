@@ -49,12 +49,12 @@
 /**
  * The number of horizontal nodes in the animated background.
  */
-#define ANIMATION_WIDTH 30
+#define ANIMATION_WIDTH ARGUMENT_VALUE(background_animation_size).width
 
 /**
  * The number of vertical nodes in the animated background.
  */
-#define ANIMATION_HEIGHT 30
+#define ANIMATION_HEIGHT ARGUMENT_VALUE(background_animation_size).height
 
 /**
  * The speed of the background animation.
@@ -562,7 +562,8 @@ main(int argc, char *argv[],
     double spiral_rotation_speed,
     double spiral_twist,
     spiral_color_t spiral_color,
-    background_color_t background_color)
+    background_color_t background_color,
+    background_animation_size_t background_animation_size)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

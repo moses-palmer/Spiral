@@ -257,3 +257,31 @@ ARGUMENT(struct { GLfloat d[3]; }, background_color, "-b",
     }
     ,
 )
+
+ARGUMENT(struct { int width; int height; }, background_animation_size, "-a",
+    "<WIDTH> <HEIGHT>\n"
+    "Sets the size of the animated background matrix.\n"
+    "\n"
+    "This is the number of nodes in each direction to use, and each value must "
+    "be greater than 2 and less than 50.\n"
+    "\n"
+    "Default: 30 30",
+    2,
+    ARGUMENT_IS_OPTIONAL,
+
+    target->width = 30;
+    target->height = 30;
+    ,
+
+    target->width = atoi(value_strings[0]);
+    target->height = atoi(value_strings[1]);
+    is_valid = target->width >= 1 && target->height >= 1
+        && target->width < 50 && target->height < 50;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for background-animation-size (%s %s): "
+            "dimensions must be integers larger than 1 and less than 50\n",
+            value_strings[0], value_strings[1]);
+    }
+    ,
+)
