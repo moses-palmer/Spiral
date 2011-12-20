@@ -556,13 +556,13 @@ opengl_initialize(int width, int height)
 static int
 main(int argc, char *argv[],
     window_size_t window_size,
-    background_color_t background_color,
     unsigned int spiral_alterations,
     unsigned int spiral_curves,
     double spiral_line_width,
     double spiral_rotation_speed,
     double spiral_twist,
-    spiral_color_t spiral_color)
+    spiral_color_t spiral_color,
+    background_color_t background_color)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

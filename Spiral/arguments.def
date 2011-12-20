@@ -84,30 +84,6 @@ ARGUMENT(struct { int width; int height; }, window_size, "-w",
     ,
 )
 
-ARGUMENT(struct { GLfloat d[3]; }, background_color, "-b",
-    "<BACKGROUND_COLOUR>\n"
-    "Sets the colour of the background, specified as an HTML colour value.\n"
-    "\n"
-    "Both hexadecimal values (#FFFFFF) and named values (white) are "
-    "recognised.\n"
-    "\n"
-    "Default: black",
-    1,
-    ARGUMENT_IS_OPTIONAL,
-
-    target->d[0] = 0.0;
-    target->d[1] = 0.0;
-    target->d[2] = 0.0;
-    ,
-
-    is_valid = color_parse(value_strings[0], target->d);
-    if (!is_valid) {
-        fprintf(stderr, "Invalid value for BACKGROUND_COLOUR (%s)\n",
-            value_strings[0]);
-    }
-    ,
-)
-
 ARGUMENT_SECTION(
     "Spiral arguments.")
 
@@ -251,6 +227,32 @@ ARGUMENT(struct { GLfloat d[3]; }, spiral_color, "-s",
     is_valid = color_parse(value_strings[0], target->d);
     if (!is_valid) {
         fprintf(stderr, "Invalid value for SPIRAL_COLOUR (%s)\n",
+            value_strings[0]);
+    }
+    ,
+)
+
+ARGUMENT_SECTION("Background options")
+
+ARGUMENT(struct { GLfloat d[3]; }, background_color, "-b",
+    "<BACKGROUND_COLOUR>\n"
+    "Sets the colour of the background, specified as an HTML colour value.\n"
+    "\n"
+    "Both hexadecimal values (#FFFFFF) and named values (white) are "
+    "recognised.\n"
+    "\n"
+    "Default: black",
+    1,
+    ARGUMENT_IS_OPTIONAL,
+
+    target->d[0] = 0.0;
+    target->d[1] = 0.0;
+    target->d[2] = 0.0;
+    ,
+
+    is_valid = color_parse(value_strings[0], target->d);
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for BACKGROUND_COLOUR (%s)\n",
             value_strings[0]);
     }
     ,
