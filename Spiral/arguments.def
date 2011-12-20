@@ -336,3 +336,28 @@ ARGUMENT(double, background_animation_turbulence, ARGUMENT_NO_SHORT_OPTION,
     }
     ,
 )
+
+ARGUMENT(double, background_animation_opacity, ARGUMENT_NO_SHORT_OPTION,
+    "<OPACITY>\n"
+    "Sets the opacity of the background animation.\n"
+    "\n"
+    "This must be a value between 0.0 and 1.0, where 0.0 make the background "
+    "invisible and 1.0 makes it fully opaque.\n"
+    "\n"
+    "Default: 0.0",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 0.0;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= 0.0 && *target <= 1.0;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for OPACITY (%s): the value must be "
+            "a number between 0.0 and 1.0\n",
+            value_strings[0]);
+    }
+    ,
+)

@@ -69,7 +69,7 @@
 /**
  * The opacity of the background animation.
  */
-#define ANIMATION_OPACITY 0.4
+#define ANIMATION_OPACITY ARGUMENT_VALUE(background_animation_opacity)
 
 /**
  * One node of the animated background.
@@ -565,7 +565,8 @@ main(int argc, char *argv[],
     background_color_t background_color,
     background_animation_size_t background_animation_size,
     double background_animation_speed,
-    double background_animation_turbulence)
+    double background_animation_turbulence,
+    double background_animation_opacity)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
