@@ -46,6 +46,27 @@
  */
 #define SPIRAL_TWIST ARGUMENT_VALUE(spiral_twist)
 
+/**
+ * The number of horizontal nodes in the animated background.
+ */
+#define ANIMATION_WIDTH 30
+
+/**
+ * The number of vertical nodes in the animated background.
+ */
+#define ANIMATION_HEIGHT 30
+
+/**
+ * One node of the animated background.
+ */
+typedef struct {
+    /** The colour of the node */
+    GLfloat red, green, blue;
+
+    /** The random offset of the node */
+    double d;
+} AnimationNode;
+
 static struct {
     /** The scale factor to apply to make horisontal and vertical distances
         equal */
@@ -62,7 +83,64 @@ static struct {
         /** The scale factor used to zoom into the actual spiral */
         GLfloat scale;
     } spiral;
+
+    struct {
+        /** The width and height, in nodes, of the animation */
+        unsigned int width, height;
+
+        /** The animation nodes; this array will contain width * height
+            elements */
+        AnimationNode *nodes;
+    } animation;
 } context;
+
+/**
+ * Initialises the animation struct of context.
+ *
+ * If this function returns successfully, context_animation_free must be called.
+ *
+ * @return non-zero if the animation struct was sucessfully initialised and 0
+ *     otherwise
+ * @see context_animation_free
+ */
+static int
+context_animation_init(void)
+{
+    context.animation.width = ANIMATION_WIDTH;
+    context.animation.height = ANIMATION_HEIGHT;
+
+    /* Allocate a buffer for the nodes and fail if that fails */
+    context.animation.nodes = malloc(sizeof(*context.animation.nodes)
+        * context.animation.width * context.animation.height);
+    if (!context.animation.nodes) {
+        printf("Failed to create animation of size %dx%d.\n",
+            context.animation.width, context.animation.height);
+        return 0;
+    }
+
+    /* Initialise the nodes */
+    int x, y;
+    for (x = 0; x < context.animation.width; x++) {
+        for (y = 0; y < context.animation.height; y++) {
+            AnimationNode *node = context_animation_get_node(x, y);
+            node->red = (GLfloat)rand() / RAND_MAX;
+            node->green = (GLfloat)rand() / RAND_MAX;
+            node->blue = (GLfloat)rand() / RAND_MAX;
+            node->d = 2.0 * M_PI * (double)rand() / RAND_MAX;
+        }
+    }
+
+    return 1;
+}
+
+/**
+ * Releases the resouces allocated by context_animation_init.
+ */
+static void
+context_animation_free(void)
+{
+    free(context.animation.nodes);
+}
 
 /**
  * Creates the spiral texture and initialises the spiral struct of context.
@@ -382,6 +460,11 @@ main(int argc, char *argv[],
         context.yscale = (double)viewport_height / viewport_width;
     }
 
+    if (!context_animation_init()) {
+        /* context_animation_init prints its own error message */
+        return 1;
+    }
+
     if (!context_spiral_init(viewport_width, viewport_height)) {
         /* context_spiral_init prints its own error message */
         return 1;
@@ -392,6 +475,7 @@ main(int argc, char *argv[],
 
     /* Release resources */
     context_spiral_free();
+    context_animation_free();
 
     SDL_RemoveTimer(timer);
 
