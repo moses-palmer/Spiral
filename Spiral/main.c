@@ -59,7 +59,7 @@
 /**
  * The speed of the background animation.
  */
-#define ANIMATION_SPEED 1.3
+#define ANIMATION_SPEED ARGUMENT_VALUE(background_animation_speed)
 
 /**
  * The turbulence of the background animation.
@@ -563,7 +563,8 @@ main(int argc, char *argv[],
     double spiral_twist,
     spiral_color_t spiral_color,
     background_color_t background_color,
-    background_animation_size_t background_animation_size)
+    background_animation_size_t background_animation_size,
+    double background_animation_speed)
 {
     /* Initialize SDL */
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {

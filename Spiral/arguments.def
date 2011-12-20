@@ -285,3 +285,27 @@ ARGUMENT(struct { int width; int height; }, background_animation_size, "-a",
     }
     ,
 )
+
+ARGUMENT(double, background_animation_speed, ARGUMENT_NO_SHORT_OPTION,
+    "<ANIMATIONSPEED>\n"
+    "Sets the speed of the background animation.\n"
+    "\n"
+    "This must be a value between 0.1 and 4.0.\n"
+    "\n"
+    "Default: 1.5",
+    1, ARGUMENT_IS_OPTIONAL,
+
+    *target = 1.5;
+    ,
+
+    char *end;
+    *target = strtod(value_strings[0], &end);
+    is_valid = *end == 0 && *target >= 0.1 && *target <= 4.0;
+
+    if (!is_valid) {
+        fprintf(stderr, "Invalid value for ANIMATIONSPEED (%s): the value must "
+            "be a number between 0.1 and 4.0\n",
+            value_strings[0]);
+    }
+    ,
+)
