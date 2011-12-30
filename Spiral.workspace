@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
-		<Project filename="Spiral/Spiral.cbp" active="1" />
+		<Project filename="Spiral/Spiral.cbp" active="1">
+			<Depends filename="libpara/para.cbp" />
+		</Project>
 		<Project filename="libpara/para.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
