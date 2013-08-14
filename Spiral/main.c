@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <GL/glew.h>
 #include <GL/gl.h>
 #include <SDL.h>
 
@@ -604,14 +603,6 @@ main(int argc, char *argv[],
     if (!screen) {
         printf("Unable to set %dx%d video: %s\n",
             viewport_width, viewport_height, SDL_GetError());
-        return 1;
-    }
-
-    /* Intialise GLEW */
-    GLenum glew_error = glewInit();
-    if (glew_error != GLEW_OK) {
-        printf("Failed to intialise GLEW: %s\n",
-            glewGetErrorString(glew_error));
         return 1;
     }
 
