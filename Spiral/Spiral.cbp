@@ -33,8 +33,8 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`sdl-config --cflags`" />
 			<Add option="-Wall" />
+			<Add option="`sdl-config --cflags`" />
 			<Add directory="../libpara" />
 		</Compiler>
 		<Linker>
